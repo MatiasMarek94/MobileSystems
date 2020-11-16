@@ -32,7 +32,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         // event.sensor.getType() because multiple types.
+        //Test 
     }
-    
+
 
 }
