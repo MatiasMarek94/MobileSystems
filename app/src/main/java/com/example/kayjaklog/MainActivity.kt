@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL)
 
-
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
