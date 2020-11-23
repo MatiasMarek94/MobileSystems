@@ -6,9 +6,13 @@ import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import android.hardware.SensorEventListener
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
+
 
     lateinit var sensorManager: SensorManager
 
@@ -16,13 +20,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-
-        sensorManager.registerListener(
-                this,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_NORMAL)
-
+        val btn_start = findViewById(R.id.start_button) as Button
+        btn_start.setOnClickListener {
+            // your code to perform when the user clicks on the button
+            Toast.makeText(this@MainActivity, "Start -> sensors", Toast.LENGTH_SHORT).show()
+            print("click")
+        }
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -34,6 +37,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         //Test
         //TEst
     }
+
 
 
 }
