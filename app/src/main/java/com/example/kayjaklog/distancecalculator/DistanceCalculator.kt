@@ -1,6 +1,7 @@
 package com.example.kayjaklog.distancecalculator
 
 import android.hardware.SensorEvent
+import com.example.kayjaklog.accelerometer.AccelerometerSensorEvent
 import com.example.kayjaklog.accelerometer.AccelerometerSingleton
 import com.example.kayjaklog.accelerometer.IAccelerometerObserver
 
@@ -26,7 +27,7 @@ class DistanceCalculator: IAccelerometerObserver {
         observers.remove(observer);
     }
 
-    override fun onSensorChange(event: SensorEvent) {
+    override fun onSensorChange(event: AccelerometerSensorEvent) {
         TODO("Not yet implemented")
     }
 

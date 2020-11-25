@@ -1,7 +1,5 @@
 package com.example.kayjaklog.accelerometer
 
-import android.hardware.SensorEvent
-
 interface IAccelerometerObserver {
-    fun onSensorChange(event: SensorEvent);
+    fun onSensorChange(event: AccelerometerSensorEvent);
 }
