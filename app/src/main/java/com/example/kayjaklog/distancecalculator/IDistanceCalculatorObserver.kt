@@ -1,5 +1,5 @@
 package com.example.kayjaklog.distancecalculator
 
 interface IDistanceCalculatorObserver {
-    fun onThresholdExceeded();
+    fun onThresholdExceeded(event: DistanceThresholdExceedEvent);
 }

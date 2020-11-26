@@ -1,9 +1,9 @@
 package com.example.kayjaklog.accelerometer
 
 object AccelerometerSingleton {
-    private var instance: Accelerometer = Accelerometer()
+    private var instance: AccelerometerWrapper = AccelerometerWrapper()
 
-    fun getInstance(): Accelerometer {
+    fun getInstance(): AccelerometerWrapper {
         return instance;
     }
 }
