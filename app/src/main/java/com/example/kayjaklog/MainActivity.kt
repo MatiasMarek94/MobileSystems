@@ -8,6 +8,8 @@ import android.hardware.SensorManager
 import android.hardware.SensorEventListener
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kayjaklog.location.*
+import com.google.android.gms.location.LocationServices
 import com.example.kayjaklog.accelerometer.*
 import com.example.kayjaklog.distancecalculator.DistanceCalculator
 import com.example.kayjaklog.distancecalculator.DistanceCalculatorSingleton
@@ -15,7 +17,8 @@ import com.example.kayjaklog.distancecalculator.DistanceThresholdExceedEvent
 import com.example.kayjaklog.distancecalculator.IDistanceCalculatorObserver
 import java.nio.file.FileSystems
 
-class MainActivity : AppCompatActivity(), IAccelerometerObserver, IDistanceCalculatorObserver {
+class MainActivity : AppCompatActivity(), IAccelerometerObserver, IDistanceCalculatorObserver, ILocationChangeObserver, ILocationObserver {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +32,26 @@ class MainActivity : AppCompatActivity(), IAccelerometerObserver, IDistanceCalcu
 //        accelerometer.startTimer()
         accelerometer.startListeningToSensorManager(getSystemService(Context.SENSOR_SERVICE) as SensorManager)
 
+
+        var locationWrapper = LocationWrapperSingleton.getInstance()
+        locationWrapper.setup(LocationServices.getFusedLocationProviderClient(this))
+
+        var locationChangeWrapper = LocationChangeWrapperSingleton.getInstance()
+        locationChangeWrapper.setup(LocationServices.getFusedLocationProviderClient(this))
+        locationChangeWrapper.addObserver(this)
+        locationChangeWrapper.requestNewLocation()
+
+        //locationWrapper.addObserver(this)
+        //locationWrapper.startListening()
+
+    }
+
+    override fun onLocationChange(event: LocationSensorEvent) {
+        println("Last location: ${event.timestamp}; ${event.lat}; ${event.lng}")
+    }
+
+    override fun onLocationUpdate(event: LocationSensorEvent) {
+        println("Listening location: ${event.timestamp}; ${event.lat}; ${event.lng}")
     }
 
     override fun onSensorChange(event: AccelerometerSensorEvent) {
