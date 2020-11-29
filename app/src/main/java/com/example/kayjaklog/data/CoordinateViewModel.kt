@@ -18,9 +18,9 @@ class CoordinateViewModel(application: Application): AndroidViewModel(applicatio
         readAllData = repository.readAllData
     }
 
-    fun addUser(coordinate: Coordinate){
+    fun addCoordinate(coordinate: Coordinate){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.addUser(coordinate)
+            repository.addCoordinate(coordinate)
         }
     }
 

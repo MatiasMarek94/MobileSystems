@@ -7,7 +7,7 @@ class CoordinateRepository(private val coordinateDao: CoordinateDao) {
 
     val readAllData: LiveData<List<Coordinate>> = coordinateDao.readAllData()
 
-    suspend fun addUser(coordinate: Coordinate) {
+    suspend fun addCoordinate(coordinate: Coordinate) {
         coordinateDao.addCoordinate(coordinate)
     }
 

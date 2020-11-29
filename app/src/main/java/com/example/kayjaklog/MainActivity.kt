@@ -29,18 +29,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         btn_start.setOnClickListener {
             // your code to perform when the user clicks on the button
             Toast.makeText(this@MainActivity, "Start -> sensors", Toast.LENGTH_SHORT).show()
-            print("click")
         }
-    }
 
-    suspend fun testRunFunction() {
-        Thread.sleep(1000)
-        val db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "database-name"
-        ).build().coordinateDao().insertSimple(System.currentTimeMillis())
 
-        println("testRunFunction");
+
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
