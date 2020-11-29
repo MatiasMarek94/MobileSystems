@@ -10,6 +10,11 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
+import com.example.kayjaklog.db.AppDatabase
+import com.example.kayjaklog.db.Coordinate
+import java.time.LocalDateTime
+import java.lang.*;
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
 
@@ -26,6 +31,16 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             Toast.makeText(this@MainActivity, "Start -> sensors", Toast.LENGTH_SHORT).show()
             print("click")
         }
+    }
+
+    suspend fun testRunFunction() {
+        Thread.sleep(1000)
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "database-name"
+        ).build().coordinateDao().insertSimple(System.currentTimeMillis())
+
+        println("testRunFunction");
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
