@@ -1,48 +1,66 @@
 package com.example.kayjaklog
 
 import android.content.Context
+import android.content.res.AssetManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import android.hardware.SensorEventListener
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.room.Room
-import com.example.kayjaklog.db.AppDatabase
-import com.example.kayjaklog.db.Coordinate
-import java.time.LocalDateTime
-import java.lang.*;
+import com.example.kayjaklog.location.*
+import com.google.android.gms.location.LocationServices
+import com.example.kayjaklog.accelerometer.*
+import com.example.kayjaklog.distancecalculator.DistanceCalculator
+import com.example.kayjaklog.distancecalculator.DistanceCalculatorSingleton
+import com.example.kayjaklog.distancecalculator.DistanceThresholdExceedEvent
+import com.example.kayjaklog.distancecalculator.IDistanceCalculatorObserver
+import java.nio.file.FileSystems
 
-class MainActivity : AppCompatActivity(), SensorEventListener {
+class MainActivity : AppCompatActivity(), IAccelerometerObserver, IDistanceCalculatorObserver, ILocationChangeObserver, ILocationObserver {
 
-
-    lateinit var sensorManager: SensorManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val btn_start = findViewById(R.id.start_button) as Button
-        btn_start.setOnClickListener {
-            // your code to perform when the user clicks on the button
-            Toast.makeText(this@MainActivity, "Start -> sensors", Toast.LENGTH_SHORT).show()
-        }
+        AccelerometerMockData.loadFiles(assets)
+        val accelerometer = AccelerometerSingleton.getInstance()
+        accelerometer.addObserver(this)
+        val distanceCalculator = DistanceCalculatorSingleton.getInstance()
+        distanceCalculator.addObserver(this)
+//        accelerometer.startTimer()
+        accelerometer.startListeningToSensorManager(getSystemService(Context.SENSOR_SERVICE) as SensorManager)
 
 
+        var locationWrapper = LocationWrapperSingleton.getInstance()
+        locationWrapper.setup(LocationServices.getFusedLocationProviderClient(this))
+
+        var locationChangeWrapper = LocationChangeWrapperSingleton.getInstance()
+        locationChangeWrapper.setup(LocationServices.getFusedLocationProviderClient(this))
+        locationChangeWrapper.addObserver(this)
+        locationChangeWrapper.requestNewLocation()
+
+        //locationWrapper.addObserver(this)
+        //locationWrapper.startListening()
 
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        TODO("Not yet implemented")
+    override fun onLocationChange(event: LocationSensorEvent) {
+        println("Last location: ${event.timestamp}; ${event.lat}; ${event.lng}")
     }
 
-    override fun onSensorChanged(event: SensorEvent?) {
-        // event.sensor.getType() because multiple types.
+    override fun onLocationUpdate(event: LocationSensorEvent) {
+        println("Listening location: ${event.timestamp}; ${event.lat}; ${event.lng}")
     }
 
+    override fun onSensorChange(event: AccelerometerSensorEvent) {
+        //println("Current sensor event (${event.timestamp}): ${event.x}; ${event.y}; ${event.z}. Accuracy: ${event.accuracy}")
+    }
+
+    override fun onThresholdExceeded(event: DistanceThresholdExceedEvent) {
+        println("Current distance threshold exceeded: ${event.lastTimestamp}; ${event.distance}")
+    }
 
 
 }
