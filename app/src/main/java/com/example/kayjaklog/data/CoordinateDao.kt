@@ -6,8 +6,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
+
 @Dao
 interface CoordinateDao {
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addCoordinate(coordinate: Coordinate)
 
@@ -15,6 +17,8 @@ interface CoordinateDao {
     fun readAllData(): LiveData<List<Coordinate>>
 
     @Query( "SELECT * FROM coordinate_table ORDER BY time ASC")
-    fun readAllDataByTime(): LiveData<List<Coordinate>>
+    fun getCoordinateByTime(): List<Coordinate>
 
+    @Query("DELETE FROM coordinate_table")
+    fun deleteStorage()
 }

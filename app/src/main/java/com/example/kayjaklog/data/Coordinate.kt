@@ -7,9 +7,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "coordinate_table")
 data class Coordinate(
 
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val time: Long,
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val time: Double,
     val latitude: Double,
     val longitude: Double
 )

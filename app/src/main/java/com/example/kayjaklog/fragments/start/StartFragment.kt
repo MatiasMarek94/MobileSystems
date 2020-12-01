@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.kayjaklog.R
+import kotlinx.android.synthetic.main.fragment_start.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,9 +26,16 @@ class StartFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         // Inflate the layout for this fragment
+
+        val view = inflater.inflate(R.layout.fragment_start, container, false)
+        view.floatingActionButton2.setOnClickListener {
+            Toast.makeText(requireContext(), "OnClickListener", Toast.LENGTH_LONG).show()
+
+            findNavController().navigate(R.id.action_startFragment_to_sensorView)
+
+        }
         return inflater.inflate(R.layout.fragment_start, container, false)
     }
+
 }

@@ -11,4 +11,14 @@ class CoordinateRepository(private val coordinateDao: CoordinateDao) {
         coordinateDao.addCoordinate(coordinate)
     }
 
+    suspend fun deleteStorage() {
+        coordinateDao.deleteStorage()
+    }
+
+    fun getCoordinateByTime() {
+        coordinateDao.getCoordinateByTime()
+    }
+
+
+
 }
