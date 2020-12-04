@@ -1,8 +1,10 @@
 package com.example.kayjaklog.webservice.backend
 
 import com.beust.klaxon.Klaxon
+import com.example.kayjaklog.data.Coordinate
 import com.example.kayjaklog.webservice.IWebserviceCallback
 import com.example.kayjaklog.webservice.Webservice
+import kotlin.math.floor
 
 
 class BackendWebservice {
@@ -15,31 +17,36 @@ class BackendWebservice {
         this.backendUrl = url
     }
 
-    fun createBulkCoordinates(coordinateList: ArrayList<String>, callback: IWebserviceCallback) {
+    fun createBulkCoordinates(coordinateList: ArrayList<Coordinate>, tripId: Int, callback: IWebserviceCallback) {
         if(webservice == null) {
             return
         }
 
-        var coordinates = ArrayList<CreateCoordinateModel>()
-        coordinates.add(
-            CreateCoordinateModel(
-                123,
-                32.1,
-                23.2
-            )
-        )
-        coordinates.add(
-            CreateCoordinateModel(
-                423,
-                42.1,
-                73.2
-            )
-        )
+        val stringBuilder: StringBuilder = StringBuilder()
+        stringBuilder
+            .append(backendUrl)
+            .append("Trip")
+            .append(tripId)
+            .append("/Coordinate/bulk")
 
-        println(Klaxon().toJsonString(coordinates))
+        println(Klaxon().toJsonString(coordinateList))
 
-        webservice!!.sendPost(backendUrl, Klaxon().toJsonString(coordinates), callback)
+        webservice!!.sendPost(stringBuilder.toString(), Klaxon().toJsonString(coordinateList), callback)
+    }
 
+    fun createTrip(callback: IWebserviceCallback) {
+        if(webservice == null) {
+            return
+        }
 
+        val currentEpoch = floor((System.currentTimeMillis() / 1000).toDouble()).toLong()
+        val createTripModel = CreateTripModel(currentEpoch)
+
+        val stringBuilder: StringBuilder = StringBuilder()
+        stringBuilder
+            .append(backendUrl)
+            .append("Trip")
+
+        webservice!!.sendPost(stringBuilder.toString(), Klaxon().toJsonString(createTripModel), callback)
     }
 }

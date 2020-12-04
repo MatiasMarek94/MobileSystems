@@ -1,5 +1,6 @@
 package com.example.kayjaklog.webservice.onwaterapi
 
+import com.example.kayjaklog.data.Coordinate
 import com.example.kayjaklog.webservice.IWebserviceCallback
 import com.example.kayjaklog.webservice.Webservice
 
@@ -14,13 +15,19 @@ class OnWaterApiWebservice {
         this.accessToken = accessToken
     }
 
-    fun isOnWater(coordinate: String, callback: IWebserviceCallback) {
+    fun isOnWater(coordinate: Coordinate, callback: IWebserviceCallback) {
         if(webservice == null) {
             return
         }
 
         val stringBuilder: StringBuilder = StringBuilder()
-        stringBuilder.append(url).append(coordinate).append("?access_token=").append(accessToken)
+        stringBuilder
+            .append(url)
+            .append(coordinate.latitude)
+            .append(",")
+            .append(coordinate.longitude)
+            .append("?access_token=")
+            .append(accessToken)
 
         webservice!!.sendGet(stringBuilder.toString(), callback)
     }
