@@ -21,4 +21,7 @@ interface CoordinateDao {
 
     @Query("DELETE FROM coordinate_table")
     fun deleteStorage()
+
+    @Query( "SELECT * FROM coordinate_table WHERE tripId = :tripId ORDER BY time ASC")
+    fun getAllWithTripId(tripId: Int): List<Coordinate>
 }

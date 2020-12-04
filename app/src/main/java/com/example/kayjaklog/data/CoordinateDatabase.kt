@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Coordinate::class], version = 1, exportSchema = false)
+@Database(entities = [Coordinate::class], version = 2, exportSchema = false)
 abstract class CoordinateDatabase: RoomDatabase() {
 
     abstract fun coordinateDao(): CoordinateDao
@@ -24,7 +24,9 @@ abstract class CoordinateDatabase: RoomDatabase() {
                     context.applicationContext,
                     CoordinateDatabase::class.java,
                     "coordinate_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 return instance
             }

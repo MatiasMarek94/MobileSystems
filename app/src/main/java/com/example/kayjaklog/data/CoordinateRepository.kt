@@ -29,4 +29,8 @@ class CoordinateRepository(private val coordinateDao: CoordinateDao) {
     fun getAllDAta(): LiveData<List<Coordinate>> {
         return coordinateDao.readAllData()
     }
+
+    fun getAllWithTripId(tripId: Int): List<Coordinate> {
+        return coordinateDao.getAllWithTripId(tripId)
+    }
 }

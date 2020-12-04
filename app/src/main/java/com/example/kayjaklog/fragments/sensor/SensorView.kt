@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.kayjaklog.R
+import com.example.kayjaklog.application.StaticTrip
 import com.example.kayjaklog.data.Coordinate
 import com.example.kayjaklog.data.CoordinateViewModel
 import com.example.kayjaklog.location.ILocationChangeObserver
@@ -29,6 +28,7 @@ class SensorView : Fragment(), ILocationChangeObserver {
     private lateinit var mCoordinateViewModel: CoordinateViewModel
     private var coordinateList = emptyList<Coordinate>()
     var locationChangeWrapper = LocationChangeWrapperSingleton.getInstance()
+    var staticTrip: StaticTrip? = null;
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +55,7 @@ class SensorView : Fragment(), ILocationChangeObserver {
         //Button listeners
         (view?.findViewById(R.id.refresh_button) as Button?)?.setOnClickListener(refreshListener)
         (view?.findViewById(R.id.removeData_button) as Button?)?.setOnClickListener(deleteListener)
+        (view?.findViewById(R.id.startButton) as Button?)?.setOnClickListener(startListener)
         return view
     }
 
@@ -81,13 +82,21 @@ class SensorView : Fragment(), ILocationChangeObserver {
 
     private val refreshListener = View.OnClickListener { refreshData() }
     private fun refreshData(): List<Coordinate>{
-        mCoordinateViewModel.getCoordinateByTime()
+//        staticTrip!!.stop()
+
+        requireView().findViewById<TextView>(R.id.recyclerview).text = "Coordinate:\n ${this.coordinateList}"
         return this.coordinateList;
+    }
+
+    private val startListener = View.OnClickListener { startStaticTrip() }
+    private fun startStaticTrip() {
+//        staticTrip = StaticTrip(context)
+//        staticTrip!!.start()
     }
 
     override fun onLocationChange(event: LocationSensorEvent) {
         if(event.timestamp!=null && event.lat!=null && event.lng !=null) {
-            val coordinate = Coordinate(id = 0, time = event.timestamp, latitude = event.lat, longitude = event.lng)
+            val coordinate = Coordinate(id = 0, time = event.timestamp, latitude = event.lat, longitude = event.lng, tripId = -1)
             insertDataToDatabase(coordinate)
         }
     }
