@@ -16,7 +16,7 @@ interface CoordinateDao {
     @Query( "SELECT * FROM coordinate_table ORDER BY id ASC")
     fun readAllData(): LiveData<List<Coordinate>>
 
-    @Query( "SELECT * FROM coordinate_table ORDER BY time ASC")
+    @Query( "SELECT * FROM coordinate_table ORDER BY id ASC")
     fun getCoordinateByTime(): List<Coordinate>
 
     @Query("DELETE FROM coordinate_table")

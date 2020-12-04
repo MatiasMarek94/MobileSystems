@@ -18,6 +18,8 @@ import com.example.kayjaklog.webservice.IWebserviceCallback
 import com.example.kayjaklog.webservice.Webservice
 import com.example.kayjaklog.webservice.WebserviceResponse
 import com.example.kayjaklog.webservice.backend.BackendWebservice
+import com.example.kayjaklog.webservice.backend.BackendWebserviceSingleton
+import com.example.kayjaklog.webservice.onwaterapi.OnWaterApiServiceSingleton
 import com.example.kayjaklog.webservice.onwaterapi.OnWaterApiWebservice
 import com.example.kayjaklog.webservice.onwaterapi.ReadResultModel
 import com.google.android.gms.location.LocationServices
@@ -52,16 +54,14 @@ class MainActivity : AppCompatActivity(), IAccelerometerObserver, IDistanceCalcu
 
 
         val webservice = Webservice(Volley.newRequestQueue(this))
-        val backendWebservice = BackendWebservice()
+        val backendWebservice = BackendWebserviceSingleton.getInstance()
         backendWebservice.setup(webservice, "http://10.0.2.2:5000/api/")
 //        backendWebservice.createBulkCoordinates(ArrayList(), webserviceCallback)
 //        backendWebservice.createTrip(webserviceCallback)
 
-        val onWaterApiWebservice = OnWaterApiWebservice()
+        val onWaterApiWebservice = OnWaterApiServiceSingleton.getInstance()
         onWaterApiWebservice.setup(webservice, "JSRTbxbsyy_6NXsT8Hsz")
 //        onWaterApiWebservice.isOnWater("23.92323,-66.3", onWaterApiWebserviceCallback)
-
-
     }
 
     override fun onLocationChange(event: LocationSensorEvent) {

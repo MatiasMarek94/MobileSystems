@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.kayjaklog.R
 import com.example.kayjaklog.data.Coordinate
@@ -29,8 +30,6 @@ class SensorView : Fragment(), ILocationChangeObserver {
     private var coordinateList = emptyList<Coordinate>()
     var locationChangeWrapper = LocationChangeWrapperSingleton.getInstance()
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,18 +44,23 @@ class SensorView : Fragment(), ILocationChangeObserver {
         mCoordinateViewModel.readAllData.observe(viewLifecycleOwner, Observer { coordinate ->
             setData(coordinate)
         })
+
+        mCoordinateViewModel = ViewModelProvider(this).get(CoordinateViewModel::class.java)
+
+        mCoordinateViewModel.readAllData.observe(viewLifecycleOwner, Observer { coordinate ->
+            println(coordinate)
+            this.coordinateList = coordinate
+            println(coordinateList)
+        })
         //Button listeners
         (view?.findViewById(R.id.refresh_button) as Button?)?.setOnClickListener(refreshListener)
         (view?.findViewById(R.id.removeData_button) as Button?)?.setOnClickListener(deleteListener)
-
-
-
-
         return view
     }
 
-    private fun setData(coordinate: List<Coordinate>) {
+     fun setData(coordinate: List<Coordinate>) {
         this.coordinateList = coordinate
+        println(this.coordinateList)
     }
 
     private fun getOnWaterStatus(): Boolean{
@@ -75,9 +79,9 @@ class SensorView : Fragment(), ILocationChangeObserver {
         mCoordinateViewModel.deleteAllData()
     }
 
-
     private val refreshListener = View.OnClickListener { refreshData() }
     private fun refreshData(): List<Coordinate>{
+        mCoordinateViewModel.getCoordinateByTime()
         return this.coordinateList;
     }
 

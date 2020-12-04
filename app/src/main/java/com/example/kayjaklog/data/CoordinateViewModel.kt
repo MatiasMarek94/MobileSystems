@@ -11,8 +11,7 @@ import kotlin.random.Random
 
 class CoordinateViewModel(application: Application): AndroidViewModel(application) {
 
-    val readAllData: LiveData<List<Coordinate>>
-
+    public val readAllData: LiveData<List<Coordinate>>
     private val repository: CoordinateRepository
 
 
@@ -20,6 +19,7 @@ class CoordinateViewModel(application: Application): AndroidViewModel(applicatio
         val coordinateDao = CoordinateDatabase.getDatabase(application).coordinateDao()
         repository =  CoordinateRepository(coordinateDao)
         readAllData = repository.readAllData
+
     }
 
     fun addCoordinate(coordinate: Coordinate){
@@ -43,12 +43,12 @@ class CoordinateViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
-    suspend fun getCoordinateByTime(): List<Coordinate> {
+     fun getCoordinateByTime(): List<Coordinate> {
         var result: List<Coordinate>? = null
         viewModelScope.async {
             result = repository.getCoordinateByTime()
         }
-        return result!!
+        return ArrayList()
     }
 
     fun getOnWaterStatus(): Boolean {
