@@ -3,10 +3,11 @@ package com.example.kayjaklog.data
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.kayjaklog.location.LocationChangeWrapperSingleton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlin.random.Random
 
 class CoordinateViewModel(application: Application): AndroidViewModel(application) {
 
@@ -27,13 +28,14 @@ class CoordinateViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
+    /*
     fun readAllData() : LiveData<List<Coordinate>> {
         var liveData: LiveData<List<Coordinate>>? = null
         viewModelScope.launch(Dispatchers.IO) {
              liveData = repository.readAllData
         }
         return liveData!!
-    }
+    }*/
 
     fun deleteAllData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -41,10 +43,16 @@ class CoordinateViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
-    fun getCoordinateByTime() {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getCoordinateByTime()
+    suspend fun getCoordinateByTime(): List<Coordinate> {
+        var result: List<Coordinate>? = null
+        viewModelScope.async {
+            result = repository.getCoordinateByTime()
         }
+        return result!!
+    }
+
+    fun getOnWaterStatus(): Boolean {
+        return Random.nextBoolean()
     }
 
 

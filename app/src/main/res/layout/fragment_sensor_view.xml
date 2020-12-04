@@ -7,6 +7,7 @@
     tools:context=".fragments.sensor.SensorView">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="409dp"
         android:layout_height="729dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,8 +22,8 @@
         android:layout_height="22dp"
         android:background="@color/colorAccent"
         android:text="Refresh"
-        app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        app:layout_constraintEnd_toEndOf="@+id/recyclerview"
+        app:layout_constraintTop_toTopOf="@+id/recyclerview" />
 
     <Button
         android:id="@+id/button2"
@@ -31,18 +32,16 @@
         android:layout_height="48dp"
         android:layout_marginTop="50dp"
         android:background="@android:color/holo_blue_dark"
-        android:onClick="startButton"
         android:text="Start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/onWaterText" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/removeData_button"
         android:layout_width="153dp"
         android:layout_height="39dp"
-        android:layout_marginBottom="16dp"
-        android:onClick="deleteDataButton"
+        android:layout_marginBottom="28dp"
         android:text="Remove my Data"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,14 +52,12 @@
         android:layout_width="322dp"
         android:layout_height="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="10dp"
-        android:onClick="accuracyModeSlide"
+        android:layout_marginBottom="16dp"
         android:text="Enable High Accuracy Mode"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintBottom_toTopOf="@+id/removeData_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -84,15 +81,16 @@
         app:srcCompat="@drawable/walking" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/recyclerview"
         android:layout_width="244dp"
         android:layout_height="330dp"
         android:layout_marginTop="50dp"
-        android:layout_marginBottom="16dp"
-        android:text="Measured Trajectory:"
+        android:text="Coordinate:"
         app:layout_constraintBottom_toTopOf="@+id/switch1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/button2"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

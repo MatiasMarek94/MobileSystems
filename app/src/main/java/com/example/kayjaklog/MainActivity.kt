@@ -49,9 +49,6 @@ class MainActivity : AppCompatActivity(), IAccelerometerObserver, IDistanceCalcu
         locationChangeWrapper.addObserver(this)
         locationChangeWrapper.requestNewLocation()
       //  setupActionBarWithNavController(findNavController(R.id.my_nav))
-
-
-
         //locationWrapper.addObserver(this)
         //locationWrapper.startListening()
     }
@@ -63,11 +60,11 @@ class MainActivity : AppCompatActivity(), IAccelerometerObserver, IDistanceCalcu
 
 
     override fun onLocationChange(event: LocationSensorEvent) {
-        println("Last location: ${event.timestamp}; ${event.lat}; ${event.lng}")
+        // println("Last location: ${event.timestamp}; ${event.lat}; ${event.lng}")
     }
 
     override fun onLocationUpdate(event: LocationSensorEvent) {
-        println("Listening location: ${event.timestamp}; ${event.lat}; ${event.lng}")
+        // println("Listening location: ${event.timestamp}; ${event.lat}; ${event.lng}")
     }
 
     override fun onSensorChange(event: AccelerometerSensorEvent) {
@@ -75,7 +72,7 @@ class MainActivity : AppCompatActivity(), IAccelerometerObserver, IDistanceCalcu
     }
 
     override fun onThresholdExceeded(event: DistanceThresholdExceedEvent) {
-        println("Current distance threshold exceeded: ${event.lastTimestamp}; ${event.distance}")
+        // println("Current distance threshold exceeded: ${event.lastTimestamp}; ${event.distance}")
     }
 
 

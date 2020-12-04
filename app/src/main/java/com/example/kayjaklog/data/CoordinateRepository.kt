@@ -5,8 +5,9 @@ import androidx.lifecycle.LiveData
 
 class CoordinateRepository(private val coordinateDao: CoordinateDao) {
 
-    val readAllData: LiveData<List<Coordinate>> = coordinateDao.readAllData()
+    val readAllData: LiveData<List<Coordinate>> = getAllDAta()
 
+    //WebService
     suspend fun addCoordinate(coordinate: Coordinate) {
         coordinateDao.addCoordinate(coordinate)
     }
@@ -15,8 +16,12 @@ class CoordinateRepository(private val coordinateDao: CoordinateDao) {
         coordinateDao.deleteStorage()
     }
 
-    fun getCoordinateByTime() {
-        coordinateDao.getCoordinateByTime()
+    suspend fun getCoordinateByTime() : List<Coordinate> {
+        return coordinateDao.getCoordinateByTime()
+    }
+
+    fun getAllDAta(): LiveData<List<Coordinate>> {
+        return coordinateDao.readAllData()
     }
 
 
