@@ -8,12 +8,23 @@ import com.example.kayjaklog.location.ILocationObserver
 import com.example.kayjaklog.location.LocationSensorEvent
 import com.example.kayjaklog.location.LocationWrapper
 import com.example.kayjaklog.location.LocationWrapperSingleton
-import kotlinx.coroutines.*
+import com.example.kayjaklog.webservice.IWebserviceCallback
+import com.example.kayjaklog.webservice.WebserviceResponse
+import com.example.kayjaklog.webservice.backend.BackendWebservice
+import com.example.kayjaklog.webservice.backend.BackendWebserviceSingleton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class StaticTrip(context: Context?) : ILocationObserver {
-    val tripId: Int = 0
-    val locationWrapper: LocationWrapper = LocationWrapperSingleton.getInstance()
+    private val locationWrapper: LocationWrapper = LocationWrapperSingleton.getInstance()
     private val repository: CoordinateRepository
+    private val backendWebservice: BackendWebservice = BackendWebserviceSingleton.getInstance()
+
+    var tripStatus: TripStatus = TripStatus.Created
+    val tripId: Int = 0
+    var backendTripId = -1
+    var finalCoordinates: ArrayList<Coordinate>? = null
 
 
     init {
@@ -24,15 +35,18 @@ class StaticTrip(context: Context?) : ILocationObserver {
     fun start() {
         locationWrapper.addObserver(this)
         locationWrapper.startListening()
-        println("Started static!")
+        tripStatus = TripStatus.Started
     }
 
     fun stop() {
+        println("Stopping static trip!")
         locationWrapper.removeObserver(this)
+        tripStatus = TripStatus.Stopped
         val scope = CoroutineScope(Dispatchers.IO)
         scope.launch {
-            val result = repository.getAllWithTripId(tripId)
-            println("With trip id = 0: $result")
+            finalCoordinates = ArrayList(repository.getAllWithTripId(tripId))
+            backendWebservice.createTrip(tripCreateCallBack)
+            tripStatus = TripStatus.TripSubmitted
         }
     }
 
@@ -46,7 +60,22 @@ class StaticTrip(context: Context?) : ILocationObserver {
                 event.lng,
                 tripId
             ))
-            println("Saved with trip id 0!")
+        }
+    }
+
+    private val tripCreateCallBack = object : IWebserviceCallback {
+        override fun onWebserviceResponse(webserviceResponse: WebserviceResponse) {
+            backendTripId = webserviceResponse.responseString.toInt()
+            backendWebservice.createBulkCoordinates(finalCoordinates!!, backendTripId, coordinatesCreateCallback)
+            tripStatus = TripStatus.CoordinatesSubmitted
+        }
+    }
+
+    private val coordinatesCreateCallback = object : IWebserviceCallback {
+        override fun onWebserviceResponse(webserviceResponse: WebserviceResponse) {
+            println("Server response: ${webserviceResponse.responseString}")
+            tripStatus = TripStatus.Complete
+            println("Static trip done!")
         }
     }
 }

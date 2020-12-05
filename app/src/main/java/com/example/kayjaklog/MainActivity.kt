@@ -17,10 +17,8 @@ import com.example.kayjaklog.location.*
 import com.example.kayjaklog.webservice.IWebserviceCallback
 import com.example.kayjaklog.webservice.Webservice
 import com.example.kayjaklog.webservice.WebserviceResponse
-import com.example.kayjaklog.webservice.backend.BackendWebservice
 import com.example.kayjaklog.webservice.backend.BackendWebserviceSingleton
 import com.example.kayjaklog.webservice.onwaterapi.OnWaterApiServiceSingleton
-import com.example.kayjaklog.webservice.onwaterapi.OnWaterApiWebservice
 import com.example.kayjaklog.webservice.onwaterapi.ReadResultModel
 import com.google.android.gms.location.LocationServices
 
@@ -35,7 +33,7 @@ class MainActivity : AppCompatActivity(), IAccelerometerObserver, IDistanceCalcu
 
         AccelerometerMockData.loadFiles(assets)
         val accelerometer = AccelerometerSingleton.getInstance()
-        accelerometer.addObserver(this)
+//        accelerometer.addObserver(this)
         val distanceCalculator = DistanceCalculatorSingleton.getInstance()
         distanceCalculator.addObserver(this)
         //        accelerometer.startTimer()
@@ -46,8 +44,8 @@ class MainActivity : AppCompatActivity(), IAccelerometerObserver, IDistanceCalcu
 
         var locationChangeWrapper = LocationChangeWrapperSingleton.getInstance()
         locationChangeWrapper.setup(LocationServices.getFusedLocationProviderClient(this))
-        locationChangeWrapper.addObserver(this)
-        locationChangeWrapper.requestNewLocation()
+//        locationChangeWrapper.addObserver(this)
+//        locationChangeWrapper.requestNewLocation()
       //  setupActionBarWithNavController(findNavController(R.id.my_nav))
         //locationWrapper.addObserver(this)
         //locationWrapper.startListening()
@@ -55,7 +53,7 @@ class MainActivity : AppCompatActivity(), IAccelerometerObserver, IDistanceCalcu
 
         val webservice = Webservice(Volley.newRequestQueue(this))
         val backendWebservice = BackendWebserviceSingleton.getInstance()
-        backendWebservice.setup(webservice, "http://10.0.2.2:5000/api/")
+        backendWebservice.setup(webservice, "http://188.166.127.102:8080/api/")
 //        backendWebservice.createBulkCoordinates(ArrayList(), webserviceCallback)
 //        backendWebservice.createTrip(webserviceCallback)
 
@@ -77,7 +75,7 @@ class MainActivity : AppCompatActivity(), IAccelerometerObserver, IDistanceCalcu
     }
 
     override fun onThresholdExceeded(event: DistanceThresholdExceedEvent) {
-        // println("Current distance threshold exceeded: ${event.lastTimestamp}; ${event.distance}")
+         println("Current distance threshold exceeded: ${event.lastTimestamp}; ${event.distance}")
     }
 
     private val webserviceCallback = object : IWebserviceCallback {

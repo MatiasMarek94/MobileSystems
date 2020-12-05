@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.kayjaklog.R
+import com.example.kayjaklog.application.ImprovedTrip
 import com.example.kayjaklog.application.StaticTrip
 import com.example.kayjaklog.data.Coordinate
 import com.example.kayjaklog.data.CoordinateViewModel
@@ -29,6 +30,7 @@ class SensorView : Fragment(), ILocationChangeObserver {
     private var coordinateList = emptyList<Coordinate>()
     var locationChangeWrapper = LocationChangeWrapperSingleton.getInstance()
     var staticTrip: StaticTrip? = null;
+    var improvedTrip: ImprovedTrip? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +39,8 @@ class SensorView : Fragment(), ILocationChangeObserver {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_sensor_view, container, false)
         mCoordinateViewModel = ViewModelProvider(this).get(CoordinateViewModel::class.java)
-        locationChangeWrapper.addObserver(this)
-        locationChangeWrapper.requestNewLocation()
+//        locationChangeWrapper.addObserver(this)
+//        locationChangeWrapper.requestNewLocation()
 
         // CoordinateViewModel
         mCoordinateViewModel.readAllData.observe(viewLifecycleOwner, Observer { coordinate ->
@@ -48,9 +50,9 @@ class SensorView : Fragment(), ILocationChangeObserver {
         mCoordinateViewModel = ViewModelProvider(this).get(CoordinateViewModel::class.java)
 
         mCoordinateViewModel.readAllData.observe(viewLifecycleOwner, Observer { coordinate ->
-            println(coordinate)
+//            println(coordinate)
             this.coordinateList = coordinate
-            println(coordinateList)
+//            println(coordinateList)
         })
         //Button listeners
         (view?.findViewById(R.id.refresh_button) as Button?)?.setOnClickListener(refreshListener)
@@ -61,7 +63,7 @@ class SensorView : Fragment(), ILocationChangeObserver {
 
      fun setData(coordinate: List<Coordinate>) {
         this.coordinateList = coordinate
-        println(this.coordinateList)
+//        println(this.coordinateList)
     }
 
     private fun getOnWaterStatus(): Boolean{
@@ -70,7 +72,7 @@ class SensorView : Fragment(), ILocationChangeObserver {
     }
 
     private fun insertDataToDatabase(coordinate: Coordinate){
-        println("InsertDataToDatabase $coordinate")
+//        println("InsertDataToDatabase $coordinate")
         mCoordinateViewModel.addCoordinate(coordinate)
     }
 
@@ -82,7 +84,8 @@ class SensorView : Fragment(), ILocationChangeObserver {
 
     private val refreshListener = View.OnClickListener { refreshData() }
     private fun refreshData(): List<Coordinate>{
-//        staticTrip!!.stop()
+        staticTrip!!.stop()
+        improvedTrip!!.stop()
 
         requireView().findViewById<TextView>(R.id.recyclerview).text = "Coordinate:\n ${this.coordinateList}"
         return this.coordinateList;
@@ -90,8 +93,11 @@ class SensorView : Fragment(), ILocationChangeObserver {
 
     private val startListener = View.OnClickListener { startStaticTrip() }
     private fun startStaticTrip() {
-//        staticTrip = StaticTrip(context)
-//        staticTrip!!.start()
+        mCoordinateViewModel.deleteAllData()
+        staticTrip = StaticTrip(context)
+        staticTrip!!.start()
+        improvedTrip = ImprovedTrip(context)
+        improvedTrip!!.start()
     }
 
     override fun onLocationChange(event: LocationSensorEvent) {

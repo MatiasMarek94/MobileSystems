@@ -25,13 +25,16 @@ class BackendWebservice {
         val stringBuilder: StringBuilder = StringBuilder()
         stringBuilder
             .append(backendUrl)
-            .append("Trip")
+            .append("Trip/")
             .append(tripId)
             .append("/Coordinate/bulk")
 
-        println(Klaxon().toJsonString(coordinateList))
+        val sendList = ArrayList<CreateCoordinateModel>()
+        coordinateList.forEach { coordinate ->  sendList.add(CreateCoordinateModel(formatTime(coordinate.time), coordinate.latitude, coordinate.longitude))}
 
-        webservice!!.sendPost(stringBuilder.toString(), Klaxon().toJsonString(coordinateList), callback)
+        println(Klaxon().toJsonString(sendList))
+
+        webservice!!.sendPost(stringBuilder.toString(), Klaxon().toJsonString(sendList), callback)
     }
 
     fun createTrip(callback: IWebserviceCallback) {
@@ -48,5 +51,9 @@ class BackendWebservice {
             .append("Trip")
 
         webservice!!.sendPost(stringBuilder.toString(), Klaxon().toJsonString(createTripModel), callback)
+    }
+
+    private fun formatTime(time: Double): Long {
+        return floor(time).toLong()
     }
 }
