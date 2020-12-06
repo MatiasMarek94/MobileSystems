@@ -1,4 +1,6 @@
 package com.example.kayjaklog.services
 
-interface IReduceService {
+interface IReduceService  {
+
+    fun applyReduceDataPoints(): Array<DoubleArray?>?
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -17,6 +18,7 @@ import com.example.kayjaklog.data.CoordinateViewModel
 import com.example.kayjaklog.location.ILocationChangeObserver
 import com.example.kayjaklog.location.LocationChangeWrapperSingleton
 import com.example.kayjaklog.location.LocationSensorEvent
+import kotlinx.android.synthetic.main.fragment_sensor_view.view.*
 
 
 /**
@@ -39,8 +41,8 @@ class SensorView : Fragment(), ILocationChangeObserver {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_sensor_view, container, false)
         mCoordinateViewModel = ViewModelProvider(this).get(CoordinateViewModel::class.java)
-//        locationChangeWrapper.addObserver(this)
-//        locationChangeWrapper.requestNewLocation()
+        locationChangeWrapper.addObserver(this)
+        locationChangeWrapper.requestNewLocation()
 
         // CoordinateViewModel
         mCoordinateViewModel.readAllData.observe(viewLifecycleOwner, Observer { coordinate ->
@@ -66,13 +68,26 @@ class SensorView : Fragment(), ILocationChangeObserver {
 //        println(this.coordinateList)
     }
 
-    private fun getOnWaterStatus(): Boolean{
-        return mCoordinateViewModel.getOnWaterStatus()
+    private fun isOnWater(coordinate: Coordinate) {
+        println("is On Water")
+        var onWater = mCoordinateViewModel.getOnWaterStatus(coordinate)
+        requireView().findViewById<ImageView>(R.id.onWaterImage)
+        val onWaterText = requireView().findViewById(R.id.onWaterText) as TextView
+        val onWaterImg = requireView().findViewById(R.id.onWaterImage) as ImageView
+
+        if (onWater){
+            onWaterText.setText("You are not on Water.");
+            onWaterImg.setImageResource(R.drawable.walking);
+        }
+        else {
+            onWaterText.setText("You are on Water.");
+            onWaterImg.setImageResource(R.drawable.kayak);
+        }
 
     }
 
     private fun insertDataToDatabase(coordinate: Coordinate){
-//        println("InsertDataToDatabase $coordinate")
+        println("insert into the database $coordinate")
         mCoordinateViewModel.addCoordinate(coordinate)
     }
 
@@ -80,13 +95,12 @@ class SensorView : Fragment(), ILocationChangeObserver {
     private fun deleteData(){
         println("deleteData")
         mCoordinateViewModel.deleteAllData()
+        this.coordinateList = emptyList<Coordinate>()
+        requireView().findViewById<TextView>(R.id.recyclerview).text = "Coordinate:\n ${this.coordinateList}"
     }
 
     private val refreshListener = View.OnClickListener { refreshData() }
     private fun refreshData(): List<Coordinate>{
-        staticTrip!!.stop()
-        improvedTrip!!.stop()
-
         requireView().findViewById<TextView>(R.id.recyclerview).text = "Coordinate:\n ${this.coordinateList}"
         return this.coordinateList;
     }
@@ -101,11 +115,11 @@ class SensorView : Fragment(), ILocationChangeObserver {
     }
 
     override fun onLocationChange(event: LocationSensorEvent) {
+        println("onLocationChange")
         if(event.timestamp!=null && event.lat!=null && event.lng !=null) {
             val coordinate = Coordinate(id = 0, time = event.timestamp, latitude = event.lat, longitude = event.lng, tripId = -1)
+            isOnWater(coordinate)
             insertDataToDatabase(coordinate)
         }
     }
-
-
 }

@@ -24,4 +24,7 @@ interface CoordinateDao {
 
     @Query( "SELECT * FROM coordinate_table WHERE tripId = :tripId ORDER BY time ASC")
     fun getAllWithTripId(tripId: Int): List<Coordinate>
+
+    @Query("SELECT * FROM coordinate_table ORDER BY time DESC LIMIT 1")
+    fun getLatestCoordinate(): Coordinate
 }
