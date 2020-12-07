@@ -1,6 +1,7 @@
 package com.example.kayjaklog.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.beust.klaxon.Klaxon
 import com.beust.klaxon.KlaxonDoc
 import com.example.kayjaklog.webservice.IWebserviceCallback
@@ -24,12 +25,11 @@ class CoordinateRepository(private val coordinateDao: CoordinateDao) {
 
     val readAllData: LiveData<List<Coordinate>> = getAllDAta()
     val webservice: OnWaterApiWebservice = OnWaterApiServiceSingleton.getInstance()
-    val klaxon: Klaxon = Klaxon()
 
-
-
+    val onWater: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
     private val onWaterService: OnWaterApiWebservice = OnWaterApiServiceSingleton.getInstance()
-
 
     suspend fun addCoordinate(coordinate: Coordinate) {
         coordinateDao.addCoordinate(coordinate)
@@ -62,8 +62,12 @@ class CoordinateRepository(private val coordinateDao: CoordinateDao) {
             override fun onWebserviceResponse(webserviceResponse: WebserviceResponse) {
                 val onWaterResponse = Klaxon().parse<ReadResultModel>(webserviceResponse.responseString)
 
-                val boolean = onWaterResponse?.water
-                onWaterAPICallback.onWaterCallBack(OnWaterResponse(boolean!!))
+                if (onWaterResponse != null) {
+                    onWater.postValue(onWaterResponse.water!!)
+                }
+
+                val onWater = onWaterResponse?.water
+                onWaterAPICallback.onWaterCallBack(OnWaterResponse(onWater!!))
             }
         }
 

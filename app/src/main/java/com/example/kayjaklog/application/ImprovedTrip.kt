@@ -37,6 +37,7 @@ class ImprovedTrip(context: Context?) : IDistanceCalculatorObserver, ILocationCh
     }
 
     fun start() {
+        println("ImprovedTrip start()")
         locationChangeWrapper.addObserver(this)
         locationChangeWrapper.requestNewLocation()
         distanceCalculator.addObserver(this)

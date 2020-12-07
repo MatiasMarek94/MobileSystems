@@ -33,6 +33,7 @@ class StaticTrip(context: Context?) : ILocationObserver {
     }
 
     fun start() {
+        println("Static Trip start()")
         locationWrapper.addObserver(this)
         locationWrapper.startListening()
         tripStatus = TripStatus.Started
