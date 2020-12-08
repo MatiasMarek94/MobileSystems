@@ -13,7 +13,8 @@ class Trip(context: Context?): ILocationChangeObserver {
 
     private var onWaterCounter: Int = 0
     private var onLandCounter: Int = 0
-    private var startTripIndicator: Int = 3
+    //Should be 3
+    private var startTripIndicator: Int = 1
     private var endTripIndicator: Int = 5
     private var tripStarted = false
     private var locationCounter: Int = 0
@@ -36,7 +37,6 @@ class Trip(context: Context?): ILocationChangeObserver {
 
 
     override fun onLocationChange(event: LocationSensorEvent) {
-
         locationCounter++
         if (locationCounter >= askLimit) {
             locationCounter = 0
@@ -72,21 +72,18 @@ class Trip(context: Context?): ILocationChangeObserver {
     }
         private val onWaterCallback = object : IOnWaterServiceCallBack {
         override fun onWaterCallBack(Response: OnWaterResponse){
-                    println("onWaterCallBack ")
+
                     if (Response.onWater) {
-                        println("water? = ${Response.onWater}")
                         onWaterCounter++
                         if (onWaterCounter >= startTripIndicator && !tripStarted){
                             tripStarted = true
-                            askLimit + 5
+                            //askLimit + 5
                             startTrips()
                         }
                     }
-
                     else if (!Response.onWater && !tripStarted){
                         onWaterCounter == 0
                     }
-
                     else if (tripStarted && !Response.onWater){
                         onLandCounter++
                         if (onLandCounter >= endTripIndicator ) {

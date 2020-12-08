@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +19,7 @@ import com.example.kayjaklog.data.CoordinateViewModel
 import com.example.kayjaklog.location.ILocationChangeObserver
 import com.example.kayjaklog.location.LocationChangeWrapperSingleton
 import com.example.kayjaklog.location.LocationSensorEvent
-import kotlinx.android.synthetic.main.fragment_sensor_view.view.*
+
 
 
 /**
@@ -34,8 +33,7 @@ class SensorView : Fragment(), ILocationChangeObserver {
     private var coordinateList = emptyList<Coordinate>()
     var locationChangeWrapper = LocationChangeWrapperSingleton.getInstance()
     var trip: Trip? = null;
-    var staticTrip: StaticTrip? = null;
-    var improvedTrip: ImprovedTrip? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,8 +73,9 @@ class SensorView : Fragment(), ILocationChangeObserver {
         val onWaterText = requireView().findViewById(R.id.onWaterText) as TextView
         val onWaterImg = requireView().findViewById(R.id.onWaterImage) as ImageView
 
-        if (!onWater){
-            onWaterText.setText("You are not on Water.");
+        //!onWater
+        if (false){
+            onWaterText.setText("You are on land.");
             onWaterImg.setImageResource(R.drawable.walking);
         }
 
@@ -91,13 +90,11 @@ class SensorView : Fragment(), ILocationChangeObserver {
     }
 
     private fun insertDataToDatabase(coordinate: Coordinate){
-        println("insert into the database $coordinate")
         mCoordinateViewModel.addCoordinate(coordinate)
     }
 
     private val deleteListener = View.OnClickListener { deleteData() }
     private fun deleteData(){
-        println("deleteData")
         mCoordinateViewModel.deleteAllData()
         this.coordinateList = emptyList<Coordinate>()
         requireView().findViewById<TextView>(R.id.recyclerview).text = "Coordinate:\n ${this.coordinateList}"
@@ -111,7 +108,6 @@ class SensorView : Fragment(), ILocationChangeObserver {
 
     private val startListener = View.OnClickListener { startTrip() }
     private fun startTrip() {
-        println("View startTrip() ")
         mCoordinateViewModel.deleteAllData()
         trip = Trip(context)
         trip!!.start()
@@ -125,4 +121,5 @@ class SensorView : Fragment(), ILocationChangeObserver {
             insertDataToDatabase(coordinate)
         }
     }
+
 }

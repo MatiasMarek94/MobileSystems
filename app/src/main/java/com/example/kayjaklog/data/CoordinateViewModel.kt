@@ -47,9 +47,8 @@ class CoordinateViewModel(application: Application): AndroidViewModel(applicatio
 
     private val onWaterCallBack = object : IOnWaterServiceCallBack {
         override fun onWaterCallBack(onWaterResponse: OnWaterResponse) {
-            println("on water should change !")
             onWater.postValue(onWaterResponse.onWater)
-            println(onWater.value.toString())
         }
     }
+
 }
