@@ -69,7 +69,7 @@ class DistanceCalculator(private val threshold: Double): IAccelerometerObserver 
                 currAcc[0].pow(2.0) + currAcc[1].pow(2.0) + currAcc[2].pow(2.0)
             )
             distance = amount * dt.pow(2.0);
-            //println("Distance calculated: $distance, current distance: $currentDistance") // , current dt: $dt, last timestamp: ${lastSensorEvent!!.timestamp}, cur timestamp: ${event.timestamp}
+//            println("Distance calculated: $distance, current distance: $currentDistance") // , current dt: $dt, last timestamp: ${lastSensorEvent!!.timestamp}, cur timestamp: ${event.timestamp}
         }
 
         lastSensorEvent = event;

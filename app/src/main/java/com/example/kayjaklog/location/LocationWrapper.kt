@@ -35,6 +35,7 @@ class LocationWrapper {
             isListening = true
         }
     }
+
     fun stopListening() {
         if(!isListening) {
             return
