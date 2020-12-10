@@ -23,8 +23,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class CoordinateRepository(private val coordinateDao: CoordinateDao) {
 
-    val readAllData: LiveData<List<Coordinate>> = getAllDAta()
-    val webservice: OnWaterApiWebservice = OnWaterApiServiceSingleton.getInstance()
+    val readAllData: LiveData<List<Coordinate>> = getAllData()
 
     val onWater: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
@@ -43,7 +42,7 @@ class CoordinateRepository(private val coordinateDao: CoordinateDao) {
         return coordinateDao.getCoordinateByTime()
     }
 
-    fun getAllDAta(): LiveData<List<Coordinate>> {
+    fun getAllData(): LiveData<List<Coordinate>> {
         return coordinateDao.readAllData()
     }
 
@@ -51,10 +50,12 @@ class CoordinateRepository(private val coordinateDao: CoordinateDao) {
         return coordinateDao.getLatestCoordinate()
     }
 
+
     fun getAllWithTripId(tripId: Int): List<Coordinate> {
         return coordinateDao.getAllWithTripId(tripId)
     }
 
+    val webservice: OnWaterApiWebservice = OnWaterApiServiceSingleton.getInstance()
 
     fun getOnWaterStatus(latestCoordinate: Coordinate, onWaterAPICallback: IOnWaterServiceCallBack) {
 

@@ -50,6 +50,8 @@ class SensorView : Fragment(), ILocationChangeObserver {
         //LiveData Observers
         mCoordinateViewModel.readAllData.observe(viewLifecycleOwner, Observer { coordinate ->
             setData(coordinate)
+            refreshData()
+
         })
 
         mCoordinateViewModel.readAllData.observe(viewLifecycleOwner, Observer { coordinate ->
@@ -74,7 +76,7 @@ class SensorView : Fragment(), ILocationChangeObserver {
         val onWaterImg = requireView().findViewById(R.id.onWaterImage) as ImageView
 
         //!onWater
-        if (false){
+        if (!onWater){
             onWaterText.setText("You are on land.");
             onWaterImg.setImageResource(R.drawable.walking);
         }
@@ -96,7 +98,6 @@ class SensorView : Fragment(), ILocationChangeObserver {
     private val deleteListener = View.OnClickListener { deleteData() }
     private fun deleteData(){
         mCoordinateViewModel.deleteAllData()
-        this.coordinateList = emptyList<Coordinate>()
         requireView().findViewById<TextView>(R.id.recyclerview).text = "Coordinate:\n ${this.coordinateList}"
     }
 

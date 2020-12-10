@@ -13,8 +13,7 @@ class Trip(context: Context?): ILocationChangeObserver {
 
     private var onWaterCounter: Int = 0
     private var onLandCounter: Int = 0
-    //Should be 3
-    private var startTripIndicator: Int = 1
+    private var startTripIndicator: Int = 3
     private var endTripIndicator: Int = 5
     private var tripStarted = false
     private var locationCounter: Int = 0
@@ -61,9 +60,18 @@ class Trip(context: Context?): ILocationChangeObserver {
     }
 
     fun stopTrips(){
-        this.staticTrip?.stop()
-        this.improvedTrip?.stop()
-
+        if (this.staticTrip != null) {
+            this.staticTrip?.stop()
+            this.staticTrip = null
+        }
+        if (this.improvedTrip != null){
+            this.improvedTrip?.stop()
+            this.improvedTrip = null
+        }
+        else
+        {
+            return
+        }
     }
 
     fun start() {
@@ -77,7 +85,7 @@ class Trip(context: Context?): ILocationChangeObserver {
                         onWaterCounter++
                         if (onWaterCounter >= startTripIndicator && !tripStarted){
                             tripStarted = true
-                            //askLimit + 5
+                            askLimit + 5
                             startTrips()
                         }
                     }
